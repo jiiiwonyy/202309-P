@@ -8,13 +8,24 @@ struct Course {
     char className[MAX_LENGTH];
     char professorName[MAX_LENGTH];
     char classPlace[MAX_LENGTH];
-    int grade;
+    double grade;
+    struct Admission* admissionTable;
+};
+
+struct Admission {
+    char admissionName[MAX_LENGTH];
+    int year;
+    int month;
+    int day;
 };
 
 void displayTimetable(struct Course* timetable, int hakjum);
+void displayGradeTimetable(struct Course* timetable, int hakjum);
 
 int main() {
     struct Course* timetable = NULL;
+    struct Admission* admissionTable = NULL;
+
     int timetableCreated = 0;
     int hakjum = 0;
     double grade = 0.0;
@@ -107,8 +118,9 @@ int main() {
         else if (num == 2) {
             //성적 관리 프로그램 작성
             displayTimetable(timetable, hakjum);
+
             if (*goalGrade != 0.0) {
-                printf("당신의 목표 성적은 %,2lf 입니다.\n\n", *goalGrade);
+                printf("당신의 목표 성적은 %.2lf 입니다.\n\n", *goalGrade);
             }
             else {
                 printf("아직 목표 성적이 입력되지 않았습니다.\n1번을 눌러 목표 성적을 입력하세요.\n");
@@ -118,7 +130,7 @@ int main() {
             int option = 0;
             while (1) {
                 printf("\n\n성적관리 프로그램\n---------------------\n");
-                printf("1. 목표성적 입력 및 수정\n2. 각 수업 별 성적 입력 및 수정\n3. 이전으로\n");
+                printf("1. 목표성적 입력 및 수정\n2. 각 수업 별 성적 입력 및 수정\n3. 성적분석\n4. 이전으로\n");
                 scanf_s("%d", &option);
 
                 //목표 성적 입력 및 수정
@@ -138,18 +150,68 @@ int main() {
 
                 //각 과목 별 목표 성적 입력 및 수정
                 else if (option == 2) {
-
+                    for (int i = 0; i < hakjum; i++) {
+                        printf("%s 과목의 성적을 입력하세요: \n", timetable[i].className);
+                        scanf_s("%lf", &timetable[i].grade);
+                    }
+                    displayGradeTimetable(timetable, hakjum);
                 }
+
+                //목표 성적과 현재 성적 비교
                 else if (option == 3) {
+                    printf("목표 성적: %.2lf\n", *goalGrade);
+                    double currentGrade = 0.0;
+                    double sum = 0.0;
+                    for (int i = 0; i < hakjum; i++) {
+                        sum += timetable[i].grade;
+                    }
+                    currentGrade = sum / hakjum;
+                    if (sum != 0.0) {
+                        printf("현재 당신의 성적: %.2lf\n", currentGrade);
+                        if (*goalGrade > currentGrade) {
+                            printf("목표 성적까지 %.2lf만큼 남았습니다.\n", *goalGrade - currentGrade);
+                            printf("조금 더 열심히 공부하세요!\n");
+                        }
+                        else if (*goalGrade < currentGrade) {
+                            printf("목표 성적보다 %.2lf만큼 높습니다.\n", currentGrade - *goalGrade);
+                            printf("멋집니다!\n");
+                        }
+                        else {
+                            printf("목표성적과 현재 성적이 같습니다.\n");
+                        }
+                    }
+                    else
+                    {
+                        printf("현재 성적을 입력해주세요.\n");
+                    }
+                    
+                }
+                else {
                     break;
                 }
             }
+            
 
 		}
+        //과제 관리 프로그램 작성
 		else if (num == 3) {
-			//과제 관리 프로그램 작성
+            int index = 0;
+            if (hakjum==0) {
+                printf("아직 시간표가 입력되지 않았습니다.\n시간표를 먼저 입력해주세요.\n");
+            }
+            printf("\n과제 관리 프로그램입니다.\n");
+            printf("----------------------------------\n");
+            printf("과제를 입력 할 과목을 선택하세요.\n");
+            for (int i = 0; i < hakjum; i++) {
+                printf("%d. %s\n", i + 1, timetable[i].className);
+            }
+            scanf_s("%d",&index);
+            
+
+			
 		}
 		else if (num == 4) { //프로그램 종료
+            printf("프로그램을 종료합니다.");
             free(timetable);
             return 0;
 		}
@@ -165,6 +227,13 @@ void displayTimetable(struct Course* timetable, int hakjum) {
     printf("\n시간표:\n-----------------------\n");
     for (int i = 0; i < hakjum; i++) {
         printf("%s | %s | %s\n", timetable[i].className, timetable[i].professorName, timetable[i].classPlace);
+    }
+}
+
+void displayGradeTimetable(struct Course* timetable, int hakjum) {
+    printf("\n수업 별 성적:\n-----------------------\n");
+    for (int i = 0; i < hakjum; i++) {
+        printf("%s | 성적: %.2lf\n", timetable[i].className, timetable[i].grade);
     }
 }
 
