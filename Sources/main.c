@@ -67,7 +67,7 @@ int main() {
                 printf("아직 시간표가 입력되지 않았습니다.\n시간표를 먼저 입력해주세요.\n");
             }
             else {
-                manageAssignments(&timetable, hakjum);
+                manageAssignments(timetable, hakjum);
             }
         }
 

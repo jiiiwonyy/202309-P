@@ -20,9 +20,10 @@ struct Course {
 
 void manageTimetable(struct Course** timetable, int* hakjum);
 void manageGrades(struct Course* timetable, int hakjum, double* goalGrade);
+void manageAssignments(struct Course* timetable, int hakjum);
 void displayTimetable(struct Course* timetable, int hakjum);
 void displayGradeTimetable(struct Course* timetable, int hakjum);
 void displayAssignment(struct Course* timetable, int hakjum);
-void manageAssignments(struct Course* timetable, int hakjum);
+
 
 

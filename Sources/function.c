@@ -57,6 +57,7 @@ void manageTimetable(struct Course** timetable, int* hakjum) {
 void manageGrades(struct Course* timetable, int hakjum, double* goalGrade) {
     int setGrade = 0;
     int option = 0;
+    int check = 0;
 
     while (1) {
         printf("\n\n성적관리 프로그램\n---------------------\n");
@@ -80,9 +81,24 @@ void manageGrades(struct Course* timetable, int hakjum, double* goalGrade) {
 
         // 각 과목 별 목표 성적 입력 및 수정
         else if (option == 2) {
-            for (int i = 0; i < hakjum; i++) {
-                printf("%s 과목의 성적을 입력하세요: \n", timetable[i].className);
-                scanf_s("%lf", &timetable[i].grade);
+            if (!check) {
+                for (int i = 0; i < hakjum; i++) {
+                    printf("%s 과목의 성적을 입력하세요: \n", timetable[i].className);
+                    scanf_s("%lf", &timetable[i].grade);
+                }
+                check = 1;
+            }
+            else {
+                int subNum = 0;
+                printf("성적을 수정할 과목의 번호를 입력하세요.\n");
+                for (int i = 0; i < hakjum; i++) {
+                    printf("%d. %s\n", i + 1, timetable[i].className);
+                }
+                scanf_s("%d", &subNum);
+                printf("%s 과목의 성적을 수정하세요.\n",timetable[subNum-1].className);
+                scanf_s("%lf", &timetable[subNum - 1].grade);
+
+                printf("성적이 수정 되었습니다.\n");
             }
             displayGradeTimetable(timetable, hakjum);
         }
@@ -158,8 +174,13 @@ void manageAssignments(struct Course* timetable, int hakjum) {
                 return;
             }
 
+            /*
+            과제를 입력하기만 하면 프로그램이 멈춤..
+            이걸 수정해야됨
+            */
+
             printf("%s 과목의 과제를 입력하세요: \n", timetable[index - 1].className);
-            scanf_s("%s", timetable[index - 1].assignments[timetable[index - 1].assignmentCount].assignmentName, MAX_LENGTH);
+            scanf_s("%49s", timetable[index - 1].assignments[timetable[index - 1].assignmentCount].assignmentName, MAX_LENGTH);
             printf("%s 과목의 마감기한를 입력하세요: \n", timetable[index - 1].className);
             scanf_s("%d", &timetable[index - 1].assignments[timetable[index - 1].assignmentCount].dueDate);
             timetable[index - 1].assignmentCount++; // 추가된 과제 개수 증가
