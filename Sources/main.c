@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "function.h"
+#include "timetable.h"
+#include "grade.h"
+#include "todo_list.h"
+#include "common.h"
 
 int main() {
+
     struct Course* timetable = NULL;
     struct Assignment* assignments = NULL;
 
@@ -11,10 +15,12 @@ int main() {
     int hakjum = 0;
     double grade = 0.0;
     double* goalGrade = &grade;
+    int check = 0;
+    
 
     while (1) {
         printf("\n\n대학생활 도우미 프로그램입니다.\n 무엇을 도와드릴까요?\n");
-        printf("1. 시간표 관리\n2. 성적 관리\n3. 과제 관리\n4. 프로그램 종료\n");
+        printf("1. 시간표 관리\n2. 성적 관리\n3. 투두 리스트\n4. 프로그램 종료\n");
         printf("-------------------------------------------------\n");
         printf("원하는 번호를 입력하세요.\n");
 
@@ -44,6 +50,7 @@ int main() {
 
                 for (int i = 0; i < hakjum; i++) {
                     scanf_s("%49s %49s %49s", timetable[i].className, MAX_LENGTH, timetable[i].professorName, MAX_LENGTH, timetable[i].classPlace, MAX_LENGTH);
+                    timetable[i].assignmentCount = 0;
                 }
 
                 timetableCreated = 1;
@@ -59,16 +66,14 @@ int main() {
                 printf("아직 목표 성적이 입력되지 않았습니다.\n1번을 눌러 목표 성적을 입력하세요.\n");
             }
 
-            manageGrades(timetable, hakjum, goalGrade);
+            manageGrades(timetable, hakjum, goalGrade, check);
+            check = 1;
         }
-        //과제 관리 프로그램 작성
+        //투두리스트 프로그램 작성
         else if (num == 3) {
-            if (hakjum == 0) {
-                printf("아직 시간표가 입력되지 않았습니다.\n시간표를 먼저 입력해주세요.\n");
-            }
-            else {
-                manageAssignments(timetable, hakjum);
-            }
+            printf("투두리스트 입니다.\n");
+            printf("해야할 일을 추가/삭제 하세요.\n");
+            manageTodoList(timetable, hakjum);
         }
 
         else if (num == 4) { //프로그램 종료
