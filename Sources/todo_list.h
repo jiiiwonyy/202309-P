@@ -1,5 +1,5 @@
 
-void manageTodoList(struct Course* timetable, int hakjum);
-void addTodo(struct Course* timetable);
-void deleteTodo(struct Course* timetable);
-void displayTodo(struct Course* timetable, int hakjum);
+void manageTodoList(struct Todo** todoList);
+void addTodo();
+void deleteTodo();
+void displayTodo();

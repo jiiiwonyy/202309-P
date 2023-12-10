@@ -2,7 +2,7 @@
 #include "common.h"
 #include <stdio.h>
 
-void manageTodoList(struct Course* timetable, int hakjum) {
+void manageTodoList(struct Todo** todoList) {
 
     int index = 0;
 
@@ -30,22 +30,22 @@ void manageTodoList(struct Course* timetable, int hakjum) {
            
         }
     
-        displayTodo(timetable, hakjum);
+        displayTodo();
     } while (menu != 3);
 
 
 }
 
-void addTodo(struct Course* timetable) {
+void addTodo() {
     
 }
 
-void deleteTodo(struct Course* timetable) {
+void deleteTodo() {
     
 }
 
 
-void displayTodo(struct Course* timetable, int hakjum) {
+void displayTodo() {
     
 }
 

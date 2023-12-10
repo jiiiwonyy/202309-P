@@ -9,7 +9,7 @@
 int main() {
 
     struct Course* timetable = NULL;
-    struct Assignment* assignments = NULL;
+    struct Todo* todoList = NULL;
 
     int timetableCreated = 0;
     int hakjum = 0;
@@ -50,7 +50,6 @@ int main() {
 
                 for (int i = 0; i < hakjum; i++) {
                     scanf_s("%49s %49s %49s", timetable[i].className, MAX_LENGTH, timetable[i].professorName, MAX_LENGTH, timetable[i].classPlace, MAX_LENGTH);
-                    timetable[i].assignmentCount = 0;
                 }
 
                 timetableCreated = 1;
@@ -71,6 +70,7 @@ int main() {
         }
         //투두리스트 프로그램 작성
         else if (num == 3) {
+            //todoList = (struct Todo*)malloc(hakjum * sizeof(struct Course));
             printf("투두리스트 입니다.\n");
             printf("해야할 일을 추가/삭제 하세요.\n");
             manageTodoList(timetable, hakjum);
