@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "timetable.h"
 #include "grade.h"
 #include "todo_list.h"
 #include "common.h"
+
+
+void clrscr() {
+    system("cls");
+}
 
 int main() {
 
@@ -19,7 +23,9 @@ int main() {
     
 
     while (1) {
-        printf("\n\n대학생활 도우미 프로그램입니다.\n 무엇을 도와드릴까요?\n");
+        clrscr();
+
+        printf("\n대학생활 도우미 프로그램입니다.\n 무엇을 도와드릴까요?\n");
         printf("1. 시간표 관리\n2. 성적 관리\n3. 투두 리스트\n4. 프로그램 종료\n");
         printf("-------------------------------------------------\n");
         printf("원하는 번호를 입력하세요.\n");
@@ -29,6 +35,7 @@ int main() {
 
         if (num == 1)
         {
+            clrscr();
             if (!timetableCreated) {
                 int grade = 0;
                 int semester = 0;
@@ -58,6 +65,7 @@ int main() {
         }
 
         else if (num == 2) {
+            clrscr();
             if (*goalGrade != 0.0) {
                 printf("당신의 목표 성적은 %.2lf 입니다.\n\n", *goalGrade);
             }
@@ -70,10 +78,8 @@ int main() {
         }
         //투두리스트 프로그램 작성
         else if (num == 3) {
-            //todoList = (struct Todo*)malloc(hakjum * sizeof(struct Course));
-            printf("투두리스트 입니다.\n");
-            printf("해야할 일을 추가/삭제 하세요.\n");
-            manageTodoList(timetable, hakjum);
+            clrscr();
+            manageTodoList(todoList);
         }
 
         else if (num == 4) { //프로그램 종료
