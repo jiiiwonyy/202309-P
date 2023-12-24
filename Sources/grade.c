@@ -6,7 +6,7 @@
 void manageGrades(struct Course* timetable, int hakjum, double* goalGrade,int check) {
     int setGrade = (*goalGrade == 0.0) ? 0 : 1;
     int option = 0;
-    
+    int allGrade = 0;
 
     while (1) {
         printf("\n\n己利包府 橇肺弊伐\n---------------------\n");

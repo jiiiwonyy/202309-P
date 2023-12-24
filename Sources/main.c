@@ -10,6 +10,7 @@ void clrscr() {
     system("cls");
 }
 
+
 int main() {
 
     struct Course* timetable = NULL;

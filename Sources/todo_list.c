@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <time.h>
 
+struct tm current_tm;
+
 void manageTodoList() {
     char tasks[MAX_TASKS][CHAR_NUM] = { "" };
     int taskCount = 0;
@@ -54,9 +56,23 @@ void manageTodoList() {
 }
 
 void addTodo(struct Todo tasks[MAX_TASKS], int* taskCount) {
+    fflush(stdin);
+
+
     printf("할 일을 입력하세요: ");
     scanf_s("%s", tasks[*taskCount].task, (int)sizeof(tasks[*taskCount].task));
-    printf("할 일 \"%s\" 가 저장 되었습니다.\n\n", tasks[*taskCount].task);
+
+    printf("마감 날짜를 입력하세요(yyyy-mm-dd): ");
+    scanf_s("%s", tasks[*taskCount].deadline, (int)sizeof(tasks[*taskCount].deadline));
+
+    int year, month, day;
+    if (sscanf_s(tasks[*taskCount].deadline, "%d-%d-%d", &year, &month, &day) != 3) {
+        printf("날짜 형식이 잘못되었습니다. 다시 입력해주세요.\n\n");
+        return;
+    }
+
+    printf("할 일 \"%s\" 가 저장되었습니다.\n\n", tasks[*taskCount].task);
+
     (*taskCount)++;
 }
 
@@ -71,9 +87,11 @@ void deleteTodo(struct Todo tasks[MAX_TASKS], int* taskCount) {
     }
     else {
         printf("%d. %s : 할 일을 삭제합니다.\n", delIndex, tasks[delIndex - 1].task);
-        for (int i = delIndex; i < *taskCount; i++) {
-            tasks[i - 1] = tasks[i];
+
+        for (int i = delIndex - 1; i < *taskCount - 1; i++) {
+            tasks[i] = tasks[i + 1];
         }
+
         (*taskCount)--;
     }
 }
@@ -95,13 +113,58 @@ void modifyTodo(struct Todo tasks[MAX_TASKS], int* taskCount) {
     }
 }
 
-void displayTodo(char tasks[MAX_TASKS][CHAR_NUM], int taskCount) {
+void displayTodo(struct Todo tasks[MAX_TASKS], int taskCount) {
     printf("\n투두 리스트 입니다.\n");
     printf("----------------------------------\n");
+
     for (int i = 0; i < taskCount; i++) {
-        printf("%d. %s\n", i + 1, tasks[i]);
+        int dday = calculateDday(tasks[i].deadline);
+
+        if (dday > 0) {
+            printf("%d. %s (디데이: %d일)\n", i + 1, tasks[i].task, dday);
+        }
+        else if (dday == 0) {
+            printf("%d. %s (오늘까지입니다!)\n", i + 1, tasks[i].task);
+        }
+        else {
+            printf("%d. %s (마감일이 지났습니다.)\n", i + 1, tasks[i].task);
+        }
     }
     printf("\n");
+}
+
+int calculateDday(const char* deadline) {
+    struct tm current_tm = { 0 };
+    time_t current_time = time(NULL);
+    localtime_s(&current_tm, &current_time);
+
+    // 현재 날짜의 시간 정보 초기화
+    current_tm.tm_hour = 0;
+    current_tm.tm_min = 0;
+    current_tm.tm_sec = 0;
+
+    // 마감 날짜 설정
+    struct tm deadline_tm = { 0 };
+    int year, month, day;
+    if (sscanf_s(deadline, "%d-%d-%d", &year, &month, &day) == 3) {
+        deadline_tm.tm_year = year - 1900; // tm_year는 1900년을 기준으로 하므로 1900을 빼줍니다.
+        deadline_tm.tm_mon = month - 1;    // tm_mon은 0부터 시작하므로 1을 빼줍니다.
+        deadline_tm.tm_mday = day;
+    }
+
+    // 마감 날짜의 시간 정보 초기화
+    deadline_tm.tm_hour = 0;
+    deadline_tm.tm_min = 0;
+    deadline_tm.tm_sec = 0;
+
+    time_t current_day_start = mktime(&current_tm);
+    time_t deadline_day_start = mktime(&deadline_tm);
+
+    // 디데이 계산
+    double dday_seconds = difftime(deadline_day_start, current_day_start);
+    int dday_days = (int)(dday_seconds / (60 * 60 * 24));
+
+    return dday_days;
 }
 
 

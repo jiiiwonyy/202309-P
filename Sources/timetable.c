@@ -3,10 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-//시간표 관리 함수
+// 시간표 관리 함수
 void manageTimetable(struct Course** timetable, int* hakjum) {
-
     // 시간표 출력
     displayTimetable(*timetable, *hakjum);
 
@@ -19,15 +17,15 @@ void manageTimetable(struct Course** timetable, int* hakjum) {
 
     if (option == 1) {
         // 수업 추가
-        *hakjum=addCourse(*timetable, *hakjum);
+        addCourse(*timetable, hakjum);
         // 수업 추가 후 시간표 출력
         displayTimetable(*timetable, *hakjum);
     }
     else if (option == 2) {
         // 수업 삭제
-        *hakjum=deleteCourse(*timetable, *hakjum);
+        deleteCourse(*timetable, hakjum);
 
-        //수업 삭제 후 시간표 출력
+        // 수업 삭제 후 시간표 출력
         displayTimetable(*timetable, *hakjum);
     }
     else if (option == 3) {
@@ -39,28 +37,26 @@ void manageTimetable(struct Course** timetable, int* hakjum) {
 }
 
 // 수업 추가 함수
-int addCourse(struct Course* timetable, int hakjum) {
+void addCourse(struct Course* timetable, int* hakjum) {
     printf("추가할 수업의 수업명, 교수명, 장소명을 차례대로 입력하세요. (띄어쓰기로 구분)\n");
-    scanf_s("%s %s %s", timetable[hakjum].className, MAX_LENGTH, timetable[hakjum].professorName, MAX_LENGTH, timetable[hakjum].classPlace, MAX_LENGTH);
+    scanf_s("%s %s %s", timetable[*hakjum].className, MAX_LENGTH, timetable[*hakjum].professorName, MAX_LENGTH, timetable[*hakjum].classPlace, MAX_LENGTH);
 
-    hakjum++;
+    (*hakjum)++;
     printf("수업이 추가되었습니다.\n");
-
-    return hakjum;
 }
 
 // 수업 삭제 함수
-int deleteCourse(struct Course* timetable, int hakjum) {
-    if (hakjum > 0) {
+void deleteCourse(struct Course* timetable, int* hakjum) {
+    if (*hakjum > 0) {
         printf("삭제할 수업의 번호를 입력하세요 (1부터 시작)\n");
         int courseNumber = 0;
         scanf_s("%d", &courseNumber);
 
-        if (courseNumber >= 1 && courseNumber <= hakjum) {
-            for (int i = courseNumber - 1; i < hakjum - 1; i++) {
+        if (courseNumber >= 1 && courseNumber <= *hakjum) {
+            for (int i = courseNumber - 1; i < *hakjum - 1; i++) {
                 timetable[i] = timetable[i + 1];
             }
-            hakjum--;
+            (*hakjum)--;
             printf("수업이 삭제되었습니다.\n");
         }
         else {
@@ -70,16 +66,12 @@ int deleteCourse(struct Course* timetable, int hakjum) {
     else {
         printf("현재 수업이 없어 삭제할 수 없습니다.\n");
     }
-
-    return hakjum;
 }
 
-//시간표 보여주는 함수
+// 시간표 보여주는 함수
 void displayTimetable(struct Course* timetable, int hakjum) {
     printf("\n시간표:\n-----------------------\n");
     for (int i = 0; i < hakjum; i++) {
         printf("%s | %s | %s\n", timetable[i].className, timetable[i].professorName, timetable[i].classPlace);
     }
 }
-
-

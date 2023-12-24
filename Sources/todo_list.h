@@ -5,11 +5,12 @@
 
 struct Todo {
     char task[CHAR_NUM];
-    char date[DATE_LENGTH];
+    char deadline[DATE_LENGTH];
 };
 
 void manageTodoList();
 void addTodo(struct Todo tasks[MAX_TASKS], int* taskCount);
 void deleteTodo(struct Todo tasks[MAX_TASKS], int* taskCount);
 void modifyTodo(struct Todo tasks[MAX_TASKS], int* taskCount);
-void displayTodo(char tasks[MAX_TASKS][CHAR_NUM], int taskCount);
+void displayTodo(struct Todo tasks[MAX_TASKS], int taskCount);
+int calculateDday(const char* deadline);
